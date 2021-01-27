@@ -1,7 +1,10 @@
+// SPDX-License-Identifier: Apache-2.0
 pragma solidity ^0.7.3;
 pragma experimental ABIEncoderV2;
 
-contract HashTimeLock {
+import "./Context.sol";
+
+contract HashTimeLock is Context {
 
     mapping(bytes32 => LockContract) public contracts;
 
@@ -62,7 +65,7 @@ contract HashTimeLock {
         string calldata outputNetwork,
         string calldata outputAddress
     ) external payable {
-        address payable sender = msg.sender;
+        address payable sender = _msgSender();
         uint256 inputAmount = msg.value;
 
         require(expiration > block.timestamp, 'INVALID_TIME');

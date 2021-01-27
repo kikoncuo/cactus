@@ -1,3 +1,4 @@
+const tap = require('tap')
 const truffleAssert = require("truffle-assertions");
 const HashTimeLock = artifacts.require("HashTimeLock");
 const { SECONDS_IN_ONE_MINUTE } = require("./constants.js");
@@ -16,21 +17,23 @@ contract("HashTimeLock", () => {
   });
 
   // Deploy contract
-  it("should deploy contract", async () => {
-    assert(
-      contractInstance.address !== "",
+  tap.test("should deploy contract", async () => {
+    tap.notEqual(
+      contractInstance.address, "",
       `Expected valid hash for address, got ${contractInstance.address} instead`
     );
+    tap.end()
   });
 
   // Contract exists
-  it("should return error, because contract doesn't exist yet", async () => {
+  tap.test("should return error, because contract doesn't exist yet", async () => {
     const contractExists = await contractInstance.contractExists(id);
-    assert(!contractExists, `Expected false, got ${contractExists} instead`);
+    tap.notOk(contractExists, `Expected false, got ${contractExists} instead`);
+    tap.end()
   });
 
   // New contract
-  it("should create new contract", async () => {
+  tap.test("should create new contract", async () => {
     const newContract = await contractInstance.newContract(
       ...Object.values(mockNewContract),
       { value: 1 }
@@ -40,11 +43,12 @@ contract("HashTimeLock", () => {
 
     const contractId = newContract.logs[0].args.id;
     const contractExists = await contractInstance.contractExists(contractId);
-    assert(contractExists, `Expected true, got ${contractExists} instead`);
+    tap.ok(contractExists, `Expected true, got ${contractExists} instead`);
+    tap.end()
   });
 
   // Get one status
-  it("should get one status", async () => {
+  tap.test("should get one status", async () => {
     const newContract = await contractInstance.newContract(
       ...Object.values(mockNewContract),
       { value: 1 }
@@ -53,14 +57,15 @@ contract("HashTimeLock", () => {
     const contractId = newContract.logs[0].args.id;
     const getOneStatus = await contractInstance.getSingleStatus(contractId);
 
-    assert(
-      statuses[parseInt(getOneStatus)] === ACTIVE,
+    tap.equal(
+      statuses[parseInt(getOneStatus)], ACTIVE,
       `Expected ACTIVE, got ${statuses[parseInt(getOneStatus)]} instead`
     );
+    tap.end()
   });
 
   // Successful withdraw
-  it("should withdraw", async () => {
+  tap.test("should withdraw", async () => {
     const timestamp = await getTimestamp(txHash);
     const {
       outputAmount,
@@ -86,14 +91,15 @@ contract("HashTimeLock", () => {
     const getOneStatus = await contractInstance.getSingleStatus(contractId);
 
 
-    assert(
-      statuses[parseInt(getOneStatus)] === WITHDRAWN,
+    tap.equal(
+      statuses[parseInt(getOneStatus)], WITHDRAWN,
       `Expected WITHDRAWN, got ${statuses[parseInt(getOneStatus)]} instead`
     );
+    tap.end()
   });
 
   // Unsuccessful withdraw (invalid secret)
-  it("should revert withdraw, because secret is invalid", async () => {
+  tap.test("should revert withdraw, because secret is invalid", async () => {
     const timestamp = await getTimestamp(txHash);
     const {
       outputAmount,
@@ -118,10 +124,11 @@ contract("HashTimeLock", () => {
     await truffleAssert.reverts(
       contractInstance.withdraw(contractId, invalidSecret)
     );
+    tap.end()
   });
 
   // Unsuccessful withdraw (expiration time passed)
-  it("should revert withdraw, because expiration time has passed", async () => {
+  tap.test("should revert withdraw, because expiration time has passed", async () => {
     const timestamp = await getTimestamp(txHash);
     const {
       outputAmount,
@@ -148,10 +155,11 @@ contract("HashTimeLock", () => {
     await timeout(5000);
 
     await truffleAssert.reverts(contractInstance.withdraw(contractId, secret));
+    tap.end()
   });
 
   // Successful refund
-  it("should refund", async () => {
+  tap.test("should refund", async () => {
     const timestamp = await getTimestamp(txHash);
     const {
       outputAmount,
@@ -179,14 +187,15 @@ contract("HashTimeLock", () => {
 
     const getOneStatus = await contractInstance.getSingleStatus(contractId);
 
-    assert(
-      statuses[parseInt(getOneStatus)] === REFUNDED,
+    tap.equal(
+      statuses[parseInt(getOneStatus)], REFUNDED,
       `Expected REFUNDED, got ${statuses[parseInt(getOneStatus)]} instead`
     );
+    tap.end()
   });
 
   // Unsuccessful refund (expiration time hasn't passed)
-  it("should revert refund, because expiration time hasn't passed yet", async () => {
+  tap.test("should revert refund, because expiration time hasn't passed yet", async () => {
     const timestamp = await getTimestamp(txHash);
     const {
       outputAmount,
@@ -207,5 +216,6 @@ contract("HashTimeLock", () => {
 
     const contractId = newContract.logs[0].args.id;
     await truffleAssert.reverts(contractInstance.refund(contractId));
+    tap.end()
   });
 });

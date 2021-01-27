@@ -1,10 +1,11 @@
+// SPDX-License-Identifier: Apache-2.0
 pragma solidity ^0.7.3;
 
 contract Migrations {
     address public owner;
     uint public last_completed_migration;
 
-    constructor() public {
+    constructor() {
         owner = msg.sender;
     }
 
