@@ -1,0 +1,581 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Hyperledger Cactus Plugin - HTLC-Eth Besu",
+    "version": "1.0",
+    "license": {
+      "name": "Apache 2.0",
+      "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "servers": [
+    {
+          "url": "https://www.cactus.stream/{basePath}",
+          "description": "Public test instance",
+          "variables": {
+              "basePath": {
+                  "default": ""
+              }
+          }
+      },
+      {
+          "url": "http://localhost:4000/{basePath}",
+          "description": "Local test instance",
+          "variables": {
+              "basePath": {
+                  "default": ""
+              }
+          }
+      }
+  ],
+  "components": {
+    "schemas": {
+      "NewContractObj": {
+        "type": "object",
+        "required": [
+          "contractAddress",
+          "outputAmount",
+          "expiration",
+          "hashLock",
+          "outputNetwork",
+          "outputAddress",
+          "credentialType",
+          "keychainId",
+          "connectorId",
+          "accountRef",
+          "privateKeyRef"
+        ],
+        "properties": {
+          "contractAddress": {
+            "description": "Contract address",
+            "type": "string",
+            "nullable": false
+          },
+          "inputAmount": {
+            "type": "number"
+          },
+          "outputAmount": {
+            "type": "number"
+          },
+          "expiration": {
+            "type": "number"
+          },
+          "hashLock": {
+            "type": "string",
+            "format": "bytes32"
+          },
+          "receiver": {
+            "type": "string"
+          },
+          "outputNetwork": {
+            "type": "string",
+            "nullable": false
+          },
+          "outputAddress": {
+            "type": "string",
+            "nullable": false
+          },
+          "credentialType": {
+            "description": "Web3SigningCredentialType",
+            "type": "string",
+            "nullable": false
+          },
+          "keychainId": {
+            "description": "KeychainId for the keychain plugin",
+            "type": "string",
+            "nullable": false
+          },
+          "connectorId": {
+            "description": "connectorId for the connector besu plugin",
+            "type": "string",
+            "nullable": false
+          },
+          "accountRef": {
+            "type": "string",
+            "nullable": false
+          },
+          "privateKeyRef": {
+            "type": "string",
+            "nullable": false
+          },
+          "gas": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              }
+            ]
+          }
+        }
+      },
+      "RefundReq": {
+        "type": "object",
+        "required": [
+          "contractAddress",
+          "credentialType",
+          "keychainId",
+          "connectorId",
+          "accountRef",
+          "privateKeyRef"
+        ],
+        "properties": {
+          "contractAddress": {
+            "description": "Contract address",
+            "type": "string",
+            "nullable": false
+          },
+          "credentialType": {
+            "description": "Web3SigningCredentialType",
+            "type": "string",
+            "nullable": false
+          },
+          "keychainId": {
+            "description": "KeychainId for the keychain plugin",
+            "type": "string",
+            "nullable": false
+          },
+          "connectorId": {
+            "description": "connectorId for the connector besu plugin",
+            "type": "string",
+            "nullable": false
+          },
+          "accountRef": {
+            "type": "string",
+            "nullable": false
+          },
+          "privateKeyRef": {
+            "type": "string",
+            "nullable": false
+          },
+          "gas": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              }
+            ]
+          }
+        }
+      },
+      "WithdrawReq": {
+        "type": "object",
+        "required": [
+          "id",
+          "secret",
+          "contractAddress",
+          "credentialType",
+          "keychainId",
+          "connectorId",
+          "accountRef",
+          "privateKeyRef"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": false
+          },
+          "secret": {
+            "type": "string",
+            "nullable": false
+          },
+          "contractAddress": {
+            "description": "Contract address",
+            "type": "string",
+            "nullable": false
+          },
+          "credentialType": {
+              "description": "Web3SigningCredentialType",
+              "type": "string",
+              "nullable": false
+          },
+          "keychainId": {
+            "description": "KeychainId for the keychain plugin",
+            "type": "string",
+            "nullable": false
+          },
+          "connectorId": {
+            "description": "connectorId for the connector besu plugin",
+            "type": "string",
+            "nullable": false
+          },
+          "accountRef": {
+            "type": "string",
+            "nullable": false
+          },
+          "privateKeyRef": {
+            "type": "string",
+            "nullable": false
+          },
+          "gas": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              }
+            ]
+          }
+        }
+      },
+      "Web3SigningCredentialType": {
+        "type": "string",
+        "enum": [
+          "CACTUS_KEYCHAIN_REF",
+          "GETH_KEYCHAIN_PASSWORD",
+          "PRIVATE_KEY_HEX",
+          "NONE"
+        ]
+      },
+      "InitializeReq": {
+        "type": "object",
+        "required": [
+          "keychainId",
+          "accountRef",
+          "privateKeyRef",
+          "credentialType",
+          "connectorId"
+        ],
+        "properties": {
+          "keychainId": {
+            "type": "string",
+            "nullable": false
+          },
+          "accountRef": {
+            "type": "string",
+            "nullable": false
+          },
+          "privateKeyRef": {
+            "type": "string",
+            "nullable": false
+          },
+          "credentialType": {
+            "type": "string",
+            "nullable": false
+          },
+          "connectorId": {
+            "type": "string",
+            "nullable": false
+          },
+          "gas": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "responses": {
+      "GetStatusResp": {
+        "description": "Array ids uint256",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "format": "uint256"
+              }
+            }
+          }
+        }
+      },
+      "GetSingleStatusResp": {
+        "description": "",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "integer",
+              "format": "uint256"
+            }
+          }
+        }
+      },
+      "GeneralResp": {
+        "description": "",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "string",
+              "format": "bytes32"
+            }
+          }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/api/v1/plugins/@hyperledger/cactus-plugin-htlc-eth-besu/new-contract": {
+      "post": {
+        "x-hyperledger-cactus": {
+          "http": {
+            "verbLowerCase": "post",
+            "path": "/api/v1/plugins/@hyperledger/cactus-plugin-htlc-eth-besu/new-contract"
+          }
+        },
+        "operationId": "newContract",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewContractObj"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "$ref": "#/components/responses/GeneralResp"
+          }
+        }
+      }
+    },
+    "/api/v1/plugins/@hyperledger/cactus-plugin-htlc-eth-besu/withdraw": {
+      "post": {
+        "x-hyperledger-cactus": {
+          "http": {
+            "verbLowerCase": "post",
+            "path": "/api/v1/plugins/@hyperledger/cactus-plugin-htlc-eth-besu/withdraw"
+          }
+        },
+        "operationId": "withdraw",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WithdrawReq"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "$ref": "#/components/responses/GeneralResp"
+          }
+        }
+      }
+    },
+    "/api/v1/plugins/@hyperledger/cactus-plugin-htlc-eth-besu/refund/{id}": {
+      "post": {
+        "x-hyperledger-cactus": {
+          "http": {
+            "verbLowerCase": "post",
+            "path": "/api/v1/plugins/@hyperledger/cactus-plugin-htlc-eth-besu/refund/:id"
+          }
+        },
+        "operationId": "refund",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "bytes32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefundReq"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "$ref": "#/components/responses/GeneralResp"
+          }
+        }
+      }
+    },
+    "/api/v1/plugins/@hyperledger/cactus-plugin-htlc-eth-besu/get-status": {
+      "get": {
+        "x-hyperledger-cactus": {
+          "http": {
+            "verbLowerCase": "get",
+            "path": "/api/v1/plugins/@hyperledger/cactus-plugin-htlc-eth-besu/get-status"
+          }
+        },
+        "operationId": "getStatus",
+        "parameters": [
+          {
+            "name": "ids",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "format": "bytes32"
+              }
+            }
+          },
+          {
+            "name": "keychainId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "contractAddress",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "credentialType",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Web3SigningCredentialType"
+            }
+          },
+          {
+            "name": "connectorId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "accountRef",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "privateKeyRef",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }          
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "$ref": "#/components/responses/GetStatusResp"
+          }
+        }
+      }
+    },
+    "/api/v1/plugins/@hyperledger/cactus-plugin-htlc-eth-besu/get-single-status/{id}": {
+      "get": {
+        "x-hyperledger-cactus": {
+          "http": {
+            "verbLowerCase": "get",
+            "path": "/api/v1/plugins/@hyperledger/cactus-plugin-htlc-eth-besu/get-single-status/:id"
+          }
+        },
+        "operationId": "getSingleStatus",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "bytes32"
+            }
+          },
+          {
+            "name": "keychainId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "contractAddress",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "credentialType",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Web3SigningCredentialType"
+            }
+          },
+          {
+            "name": "connectorId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "accountRef",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "privateKeyRef",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "$ref": "#/components/responses/GetSingleStatusResp"
+          }
+        }
+      }
+    },
+    "/api/v1/plugins/@hyperledger/cactus-plugin-htlc-eth-besu/initialize": {
+      "post": {
+        "x-hyperledger-cactus": {
+          "http": {
+            "verbLowerCase": "post",
+            "path": "/api/v1/plugins/@hyperledger/cactus-plugin-htlc-eth-besu/initialize"
+          }
+        },
+        "operationId": "initialize",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InitializeReq"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "$ref": "#/components/responses/GeneralResp"
+          }
+        }
+      }
+    }
+  }
+}
