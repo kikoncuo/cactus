@@ -1,7 +1,8 @@
 {
   "packages": [
     "packages/cactus-*",
-    "examples/cactus-*"
+    "examples/cactus-*",
+    "extensions/htlc/*"
   ],
   "version": "0.3.0",
   "command": {
