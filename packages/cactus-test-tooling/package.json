@@ -85,7 +85,7 @@
     "axios": "0.21.1",
     "compare-versions": "3.6.0",
     "dockerode": "3.2.0",
-    "fabric-ca-client": "1.4.14",
+    "fabric-client": "1.4.14",
     "fabric-network": "1.4.14",
     "fs-extra": "9.0.0",
     "is-port-reachable": "3.0.0",
