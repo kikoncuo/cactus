@@ -1,5 +1,6 @@
 {
   "name": "@hyperledger/cactus",
+  "description": "Root project for Cactus which contains all core components and plugins developed by the project.",
   "private": true,
   "scripts": {
     "run-ci": "./tools/ci.sh",
