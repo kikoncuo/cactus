@@ -31,6 +31,27 @@
     ],
     "components": {
         "schemas": {
+            "FabricSigningCredential": {
+                "type": "object",
+                "required": [
+                    "keychainId",
+                    "keychainRef"
+                ],
+                "properties": {
+                    "keychainId": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 100,
+                        "nullable": false
+                    },
+                    "keychainRef": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 100,
+                        "nullable": false
+                    }
+                }
+            },
             "ConnectionProfile": {
                 "type": "object",
                 "required": [
@@ -168,8 +189,7 @@
             "RunTransactionRequest": {
                 "type": "object",
                 "required": [
-                    "keychainId",
-                    "keychainRef",
+                    "fabricSigningCredential",
                     "channelName",
                     "chainCodeId",
                     "invocationType",
@@ -177,16 +197,8 @@
                     "functionArgs"
                 ],
                 "properties": {
-                    "keychainId": {
-                        "type": "string",
-                        "minLength": 1,
-                        "maxLength": 100,
-                        "nullable": false
-                    },
-                    "keychainRef": {
-                        "type": "string",
-                        "minLength": 1,
-                        "maxLength": 100,
+                    "fabricSigningCredential": {
+                        "$ref": "#/components/schemas/FabricSigningCredential",
                         "nullable": false
                     },
                     "channelName": {

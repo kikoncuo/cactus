@@ -123,12 +123,17 @@ test("runs tx on a Fabric v2.2.0 ledger", async (t: Test) => {
   const carId = "CAR277";
   const carOwner = uuidv4();
 
+  const channelName = "mychannel";
+  const chainCodeId = "basic";
+  const fabricSigningCredential = {
+    keychainId,
+    keychainRef: keychainEntryKey,
+  };
   {
     const res = await apiClient.runTransactionV1({
-      keychainId,
-      keychainRef: keychainEntryKey,
-      channelName: "mychannel",
-      chainCodeId: "fabcar",
+      fabricSigningCredential: fabricSigningCredential,
+      channelName,
+      chainCodeId,
       invocationType: FabricContractInvocationType.CALL,
       functionName: "queryAllCars",
       functionArgs: [],
@@ -140,9 +145,8 @@ test("runs tx on a Fabric v2.2.0 ledger", async (t: Test) => {
   }
   {
     const req: RunTransactionRequest = {
-      keychainId,
-      keychainRef: keychainEntryKey,
-      channelName: "mychannel",
+      fabricSigningCredential: fabricSigningCredential,
+      channelName,
       invocationType: FabricContractInvocationType.SEND,
       chainCodeId: "fabcar",
       functionName: "createCar",
@@ -157,10 +161,9 @@ test("runs tx on a Fabric v2.2.0 ledger", async (t: Test) => {
 
   {
     const res = await apiClient.runTransactionV1({
-      keychainId,
-      keychainRef: keychainEntryKey,
-      channelName: "mychannel",
-      chainCodeId: "fabcar",
+      fabricSigningCredential: fabricSigningCredential,
+      channelName,
+      chainCodeId,
       invocationType: FabricContractInvocationType.CALL,
       functionName: "queryAllCars",
       functionArgs: [],
