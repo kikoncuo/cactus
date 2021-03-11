@@ -130,7 +130,7 @@ test("runs tx on a Fabric v1.4.8 ledger", async (t: Test) => {
 
   {
     const res = await apiClient.runTransactionV1({
-      fabricSigningCredential: fabricSigningCredential as FabricSigningCredential,
+      fabricSigningCredential,
       channelName: "mychannel",
       chainCodeId: "fabcar",
       invocationType: FabricContractInvocationType.CALL,
@@ -145,7 +145,7 @@ test("runs tx on a Fabric v1.4.8 ledger", async (t: Test) => {
 
   {
     const req: RunTransactionRequest = {
-      fabricSigningCredential: fabricSigningCredential,
+      fabricSigningCredential,
       channelName: "mychannel",
       invocationType: FabricContractInvocationType.SEND,
       chainCodeId: "fabcar",
@@ -160,7 +160,7 @@ test("runs tx on a Fabric v1.4.8 ledger", async (t: Test) => {
   }
   {
     const res = await apiClient.runTransactionV1({
-      fabricSigningCredential: fabricSigningCredential,
+      fabricSigningCredential,
       channelName: "mychannel",
       chainCodeId: "fabcar",
       invocationType: FabricContractInvocationType.CALL,
